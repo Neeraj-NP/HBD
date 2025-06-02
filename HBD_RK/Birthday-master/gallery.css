@@ -1,0 +1,238 @@
+/* gallery.css - Styles for the Memory Lane Gallery Section */
+
+/* Define a CSS variable for navigation height */
+:root {
+    /* *** IMPORTANT: Confirm this value. Use your browser's inspect tool to find the exact computed height of your #navigation element. *** */
+    --nav-height: 80px; /* Example: If your navigation is 80px tall */
+    --border-radius: 8px; /* Standardize border-radius */
+    --text-color: #333; /* Standardize text color */
+}
+
+/* --- Gallery Section General Styling --- */
+.gallery-section {
+    background: linear-gradient(135deg, #fff5f8 0%, #ffe0eb 100%);
+
+    /* Make the section fill the viewport and enable vertical scrolling with snapping */
+    height: 100vh; /* Full viewport height */
+    overflow-y: scroll; /* Enable vertical scrolling */
+    scroll-snap-type: y mandatory; /* Enable mandatory scroll snapping on the Y-axis */
+    -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+    
+    padding: 0;
+    box-sizing: border-box; /* Include padding in the element's total height */
+    
+    /* Crucial for scroll snapping to align items precisely below the fixed header */
+    scroll-padding-top: var(--nav-height);
+}
+
+/* Ensure the navigation bar is positioned correctly and has a background */
+.navigation {
+    position: fixed; /* Keep navigation fixed at the top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1001; /* Higher z-index than content */
+    background-color: white; /* Ensure nav has a solid background to cover content below it */
+    height: var(--nav-height); /* Set nav height based on the variable for consistency */
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for visual separation */
+}
+
+/* --- Gallery Grid Layout (Modified) --- */
+.gallery-grid {
+    display: flex; /* Use flexbox to arrange items in a column */
+    flex-direction: column; /* Stack items vertically */
+}
+
+/* --- Individual Gallery Item Styling (Each item becomes a full "page") --- */
+.gallery-item {
+    background: white; /* White background for each photo card */
+    border-radius: var(--border-radius); /* Use the standardized border-radius */
+    overflow: hidden; /* Ensures content doesn't spill out */
+    box-shadow: none; /* Remove box shadow as it's a full-page item */
+    transition: none; /* Remove hover transitions as items are full-page */
+
+    /* Make each item fill the entire viewport height, respecting the nav bar */
+    width: 100vw; /* Full viewport width */
+    height: calc(100vh - var(--nav-height)); /* Subtract nav height from item height */
+    
+    /* Use flexbox to arrange content */
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: flex-start; /* Align content to the top */
+    align-items: center; /* Center content horizontally */
+    
+    scroll-snap-align: start; /* Snap to the start of each item when scrolling */
+    flex-shrink: 0; /* Prevent items from shrinking */
+    position: relative; /* For absolute positioning if needed */
+    text-align: center; /* Center align text content within the item */
+    padding: 20px; /* Add some overall padding to gallery items */
+    box-sizing: border-box; /* Ensure padding is included in height calculation */
+}
+
+/* Styling for the section title and description for the first gallery item */
+.gallery-item:first-child .section-title,
+.gallery-item:first-child .section-description {
+    position: relative; /* Changed to relative to participate in flex flow */
+    width: 90%; /* Give it some margin */
+    color: var(--text-color); /* Use standard text color or white if over a very dark image */
+    text-shadow: none; /* Remove text shadow for better readability on lighter backgrounds */
+    z-index: 2; /* Ensure it's above image if image is part of the flow below */
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 1rem; /* Space below intro text */
+    /* Remove top/left/transform for absolute positioning if you want them in flow */
+    top: auto;
+    left: auto;
+    transform: none;
+    background-color: transparent; /* No background for these titles */
+}
+
+.gallery-item:first-child .section-title {
+    font-size: 2.5rem; /* Make title prominent */
+    margin-top: 1rem; /* Space from the top edge */
+}
+
+.gallery-item:first-child .section-description {
+    margin-top: 0.5rem; /* Space below title */
+    font-size: 1.5rem;
+    font-family: 'Dancing Script', cursive;
+}
+
+/* Styling for images within gallery items */
+.gallery-item img {
+    max-width: 90vw; /* Max 90% of viewport width */
+    /* Calculate max-height to ensure space for the paragraph below,
+       and that the entire image fits within the item. */
+    /* Adjust this value based on how much space the caption usually takes.
+       Let's aim for the image to take up a significant portion of the available height. */
+    max-height: calc(100% - 180px); /* Roughly 180px reserved for title/description/padding for first item,
+                                       and paragraph/padding for subsequent items. Adjust as needed. */
+    width: auto; /* Allow width to scale based on max-height */
+    height: auto; /* Allow height to scale based on max-width */
+    display: block; /* Removes any extra space below the image */
+    
+    object-fit: contain; /* Ensures the entire image is visible without cropping */
+    object-position: center; /* Centers the image content within its box */
+    border-radius: var(--border-radius); /* Add rounded corners to the image itself */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Add a subtle shadow to the image */
+    z-index: 1; /* Ensure image is behind absolute titles if they were re-added */
+    margin-top: 1rem; /* Space between image and its descriptive text */
+}
+
+/* Styling for the text description below each image */
+.gallery-item p {
+    padding: 1.5rem; /* More padding for text */
+    text-align: center; /* Center-align the text */
+    color: var(--text-color); /* Use standardized text color */
+    font-family: 'Poppins', sans-serif; /* Use Poppins font */
+    font-size: 1.2rem; /* Slightly larger font size for readability */
+    margin-top: 1rem; /* Space between image and text */
+    max-width: 80vw; /* Limit text width for better readability */
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for text */
+    border-radius: var(--border-radius); /* Use standardized border-radius for text background */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for text background */
+}
+
+/* Special styling for the first gallery item's image to ensure it's visible with title/description */
+.gallery-item:first-child img {
+    /* If the title and description are no longer absolutely positioned over the image,
+       the image can take up more space. */
+    max-height: calc(100% - 250px); /* Reserve more space for the initial text block */
+    margin-top: 2rem; /* Give space from the descriptive text */
+}
+
+
+/* --- Image Modal (for full-size image viewing) --- */
+.image-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed position to cover the entire viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9); /* Dark, semi-transparent overlay */
+    z-index: 1000; /* High z-index to appear on top */
+    align-items: center; /* Center content vertically */
+    justify-content: center; /* Center content horizontally */
+    opacity: 0; /* Start with 0 opacity for fade-in animation */
+    transition: opacity 0.3s ease-in-out; /* Smooth fade transition */
+}
+
+.image-modal.active {
+    display: flex; /* Show modal when active */
+    opacity: 1; /* Fade in */
+}
+
+.modal-image {
+    max-width: 90%; /* Limit max width of the image in the modal */
+    max-height: 90vh; /* Limit max height of the image in the modal */
+    border-radius: var(--border-radius); /* Rounded corners for the modal image */
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); /* Stronger shadow for the modal image */
+    animation: fadeIn 0.3s ease-out; /* Apply fade-in animation */
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* --- Responsive Design for Gallery Items (now full-page) --- */
+/* Adjustments for smaller screens, mainly for text and image sizing */
+@media (max-width: 768px) { /* Tablets and smaller desktops */
+    .gallery-item {
+        height: calc(100vh - var(--nav-height)); /* Maintain calculated height */
+        padding: 15px; /* Slightly less padding */
+    }
+    .gallery-item img {
+        max-width: 95vw; /* Allow image to be slightly wider */
+        max-height: calc(100% - 150px); /* Adjusted for smaller screens, more space for text */
+    }
+    .gallery-item p {
+        font-size: 1.1rem;
+        padding: 1rem;
+        max-width: 90vw;
+    }
+    .gallery-item:first-child .section-title {
+        font-size: 2rem;
+    }
+    .gallery-item:first-child .section-description {
+        font-size: 1.2rem;
+    }
+    .gallery-item:first-child img {
+        max-height: calc(100% - 200px); /* Adjust for smaller screens */
+    }
+}
+
+@media (max-width: 480px) { /* Mobile phones */
+    .gallery-item {
+        height: calc(100vh - var(--nav-height)); /* Maintain calculated height */
+        padding: 10px; /* Less padding */
+    }
+    .gallery-item img {
+        max-width: 95vw;
+        max-height: calc(100% - 120px); /* Further reduced for mobile to ensure text fits */
+    }
+    .gallery-item p {
+        font-size: 1em;
+        padding: 0.8rem;
+        margin-top: 0.5rem;
+        max-width: 95vw;
+    }
+    .gallery-item:first-child .section-title {
+        font-size: 1.5rem;
+    }
+    .gallery-item:first-child .section-description {
+        font-size: 1rem;
+    }
+    .gallery-item:first-child img {
+        max-height: calc(100% - 180px); /* Adjust for mobile screens */
+    }
+}

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gift Details</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #C41E3A 0%, #DC143C 25%, #B22222 50%, #8B0000 75%, #660000 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .gift-detail-container {
+            min-height: 100vh;
+            padding: 1rem;
+            position: relative;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+                linear-gradient(45deg, #C41E3A, #DC143C, #B22222, #8B0000);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .gift-detail-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="sparkles" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(255,215,0,0.4)"/><circle cx="15" cy="8" r="0.5" fill="rgba(255,255,255,0.3)"/><circle cx="8" cy="15" r="0.8" fill="rgba(255,215,0,0.2)"/><circle cx="12" cy="18" r="0.6" fill="rgba(255,255,255,0.2)"/></pattern></defs><rect width="100" height="100" fill="url(%23sparkles)"/></svg>');
+            opacity: 0.4;
+            animation: sparkle 12s linear infinite;
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .gift-ribbon {
+            position: absolute;
+            width: 4px;
+            height: 60px;
+            background: linear-gradient(180deg, #FFD700, #FFA500);
+            border-radius: 2px;
+            animation: floatRibbon 8s ease-in-out infinite;
+        }
+
+        .gift-ribbon::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -4px;
+            width: 12px;
+            height: 16px;
+            background: #FFD700;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        }
+
+        .mini-gift {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #8B0000;
+            border: 2px solid #FFD700;
+            border-radius: 3px;
+            animation: floatGift 10s ease-in-out infinite;
+        }
+
+        .mini-gift::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 8px;
+            width: 4px;
+            height: 24px;
+            background: #FFD700;
+        }
+
+        .mini-gift::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: -2px;
+            width: 24px;
+            height: 4px;
+            background: #FFD700;
+        }
+
+        .balloon {
+            position: absolute;
+            width: 25px;
+            height: 35px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), transparent 50%), #FF69B4;
+            animation: floatBalloon 12s ease-in-out infinite;
+        }
+
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 20px;
+            background: #666;
+        }
+
+        @keyframes floatRibbon {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        @keyframes floatGift {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-50px) rotate(360deg) scale(1.2);
+            }
+        }
+
+        @keyframes floatBalloon {
+            0%, 100% {
+                transform: translateY(100vh) rotate(-10deg);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-100px) rotate(10deg);
+            }
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes sparkle {
+            0% {
+                transform: translateY(0px);
+            }
+            100% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .gift-images {
+            width: 100%;
+            max-width: 100vw;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .gift-image {
+            width: 70vw;
+            max-width: 500px;
+            height: auto;
+            max-height: 32vh;
+            object-fit: contain;
+            border-radius: 0;
+            box-shadow: none;
+            transition: all 0.3s ease;
+            background: none;
+            backdrop-filter: none;
+            border: none;
+        }
+
+        .gift-image:hover {
+            transform: scale(1.02);
+            box-shadow: none;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .gift-title {
+            text-align: center;
+            color: white;
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-shadow:
+                2px 2px 4px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(255, 255, 255, 0.2);
+            margin: 1.5rem 0 0.3rem 0;
+            animation: fadeInUp 1s ease;
+            position: relative;
+            z-index: 2;
+            letter-spacing: 1px;
+        }
+
+        .gift-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            border-radius: 2px;
+        }
+
+        .gift-name {
+            text-align: center;
+            color: #FFD700;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0 0 1.5rem 0;
+            text-shadow:
+                1px 1px 3px rgba(0, 0, 0, 0.7),
+                0 0 8px rgba(255, 215, 0, 0.7);
+            letter-spacing: 2px;
+            animation: fadeInUp 1.2s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gift-image {
+                width: 85vw;
+                max-height: 28vh;
+            }
+
+            .gift-title {
+                font-size: 1.8rem;
+                margin: 1rem 0 0.3rem 0;
+            }
+
+            .gift-name {
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+            }
+
+            .back-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.85rem;
+                top: 15px;
+                left: 15px;
+            }
+
+            .gift-detail-container {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gift-detail-container">
+        <div class="floating-elements" id="floatingElements"></div>
+        <a href="gift.html" class="back-button">← Back to Gifts</a>
+        <h1 class="gift-title">Your Special Gift 🎁</h1>
+        <h2 class="gift-name" id="giftName"></h2>
+        <div class="gift-images">
+            <img src="" alt="Top Gift Image" class="gift-image" id="topImage" />
+            <img src="../images/gifts/Gift_bottom.png" alt="Bottom Gift Image" class="gift-image" id="bottomImage" />
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Utility to get query param by name
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
+
+            // Get images from URL params
+            const topImageParam = getQueryParam('top');
+            const bottomImageParam = getQueryParam('Gift_bottom.png');
+
+            // Map gift images to display names
+            const giftImages = {
+                'anklets.jpg': 'BEAUTIFUL ANKLETS',
+                'badminton.jpg': 'BADMINTON SET',
+                'bracelets.jpg': 'ELEGANT BRACELETS',
+                'chocolates.jpg': 'DELICIOUS CHOCOLATES',
+                'clatchure.webp': 'FANCY CLUTCH PURSE',
+                'crystalball.png': 'CRYSTAL BALL',
+                'earings.jpg': 'STYLISH EARRINGS',
+                'face_powder.webp': 'FACE POWDER',
+                'hairserum.png': 'HAIR SERUM',
+                'headphone.jpg': 'WIRELESS HEADPHONES',
+                'makeupkit.png': 'COMPLETE MAKEUP KIT',
+                'pendant.jpg': 'BEAUTIFUL PENDANT',
+                'perfume.png': 'LUXURY PERFUME',
+                'skin toner.webp': 'REFRESHING SKIN TONER',
+                'purse.jpg': 'BEAUTIFUL PURSE',
+                'Cadburry.jpeg': 'BEAUTIFUL GIFT FOR YOU',
+                'watch.webp': 'WATCH AND BRACELETS FOR QUEEN',
+                'Crown.jpg': 'CROWN FOR PRINCESS',
+                'ring.jpg': 'PRINCESS RING FOR PRINCESS LIKE YOU',
+                'couple.jpg': 'ONLY FOR YOU AND JIJU',
+            };
+
+            // Default images if none provided
+            const defaultTopImage = '../images/gifts/anklets.jpg';
+            const defaultBottomImage = '../images/gifts/Gift_bottom.png';
+
+            // Elements
+            const topImageElem = document.getElementById('topImage');
+            const bottomImageElem = document.getElementById('bottomImage');
+            const giftNameElem = document.getElementById('giftName');
+            const giftTitleElem = document.querySelector('.gift-title');
+
+            // Use provided images or fallback
+            const topImageSrc = topImageParam ? decodeURIComponent(topImageParam) : defaultTopImage;
+            const bottomImageSrc = bottomImageParam ? decodeURIComponent(bottomImageParam) : defaultBottomImage;
+
+            topImageElem.src = topImageSrc;
+            bottomImageElem.src = bottomImageSrc;
+
+            // Extract filename from topImageSrc to find gift name
+            function extractFilename(path) {
+                return path.split('/').pop().toLowerCase();
+            }
+
+            const topFilename = extractFilename(topImageSrc).replace(/\s+/g, '').replace(/-/g, '').replace(/_/g, '');
+
+            // To match keys, normalize keys in giftImages as well (remove spaces/dashes/underscores)
+            function normalizeKey(key) {
+                return key.toLowerCase().replace(/\s+/g, '').replace(/-/g, '').replace(/_/g, '');
+            }
+
+            // Find gift name from map
+            let giftName = 'YOUR SPECIAL GIFT';
+            for (const key in giftImages) {
+                if (normalizeKey(key) === topFilename) {
+                    giftName = giftImages[key];
+                    break;
+                }
+            }
+
+            giftNameElem.textContent = giftName.toUpperCase();
+            giftTitleElem.textContent = giftName.toUpperCase();
+
+            // Floating elements creation
+            const floatingElementsContainer = document.getElementById('floatingElements');
+
+            function createFloatingRibbon(leftPercent, delay) {
+                const ribbon = document.createElement('div');
+                ribbon.classList.add('gift-ribbon');
+                ribbon.style.left = `${leftPercent}%`;
+                ribbon.style.animationDelay = `${delay}s`;
+                floatingElementsContainer.appendChild(ribbon);
+            }
+
+            function createMiniGift(leftPercent, delay) {
+                const miniGift = document.createElement('div');
+                miniGift.classList.add('mini-gift');
+                miniGift.style.left = `${leftPercent}%`;
+                miniGift.style.animationDelay = `${delay}s`;
+                floatingElementsContainer.appendChild(miniGift);
+            }
+
+            function createBalloon(leftPercent, delay) {
+                const balloon = document.createElement('div');
+                balloon.classList.add('balloon');
+                balloon.style.left = `${leftPercent}%`;
+                balloon.style.animationDelay = `${delay}s`;
+                floatingElementsContainer.appendChild(balloon);
+            }
+
+            for (let i = 0; i < 6; i++) {
+                createFloatingRibbon(10 + i * 15, i * 2);
+                createMiniGift(8 + i * 14, i * 3);
+                createBalloon(12 + i * 12, i * 2.5);
+            }
+        });
+    </script>
+</body>
+</html>
